@@ -3,21 +3,13 @@ public class Rectangle {
     //    Initializing Variables
     private double length;
     private double width;
-    private String id;
+    private final String id;
     private String units;
 
     //    Initializer Block
     {
-        // Generate unique ID
-        id = "RECT" + (int) (Math.random() * 9000 + 1000);
-
-        // Set default units if not set by constructor
-        if (units == null) {
-            units = "units";
-        }
-
-        // Print creation message
-        System.out.println("Rectangle " + id + " created");
+        int numId = (int) ((Math.random() * (9999 - 1000 + 1)) + 1000);
+        id = "RECT" + numId;
     }
 
     //    Constructors
@@ -48,7 +40,7 @@ public class Rectangle {
         return length;
     }
 
-    public double setWidth() {
+    public double getWidth() {
         return width;
     }
 
@@ -64,7 +56,6 @@ public class Rectangle {
         if (length > 0.0) {
             this.length = length;
         }
-
     }
 
     public void setWidth(double width) {
@@ -76,11 +67,14 @@ public class Rectangle {
     public void setUnits(String units) {
         if (units != null && !units.isEmpty()) {
             this.units = units;
+        } else {
+            System.out.println("Invalid units. Units shouldn't be empty or null");
+            System.out.println("Units Not Set");
         }
     }
 
     //    Calculation Methods
-    public double calculateArea(String id) {
+    public double calculateArea() {
         return length * width;
     }
 
@@ -89,7 +83,7 @@ public class Rectangle {
     }
 
     public double calculateDiagonal() {
-        return Math.sqrt(((int) length ^ 2) + ((int) width ^ 2));
+        return Math.sqrt(Math.pow(length, 2) + Math.pow(width,2));
     }
 
     public boolean isSquare() {
@@ -98,19 +92,34 @@ public class Rectangle {
 
     //    Comparison Methods
     public boolean isLargerThan(Rectangle other) {
-        return length > other.length && width > other.width;
+        double thisArea = calculateArea();
+        double otherArea = other.calculateArea();
+        return thisArea > otherArea;
     }
 
     public boolean isSameSize(Rectangle other) {
-        return Math.abs(length) == Math.abs(other.length) && Math.abs(width) == Math.abs(other.width);
+        double thisArea = calculateArea();
+        double otherArea = other.calculateArea();
+        return thisArea == otherArea;
     }
 
-    public String compareDimensions(Rectangle other) {
-        if (calculateArea(id) == calculateArea(other.id)) {
-            return id + " is equal to " + other.id;
-        } else if (calculateArea(id) >= calculateArea(other.id)) {
-            return id + " is greater than " + other.id;
-        } else
-            return id + " is less than " + other.id;
+//    Utility Methods
+    public void scale(double factor) {
+        length *= factor;
+        width *= factor;
+    }
+
+    public String getInfo() {
+        return "ID: " + id +
+                "\nLength: " + length +
+                "\nWidth: " + width +
+                "\nUnits: " + units +
+                "\nArea: " + calculateArea() +
+                "\nPerimeter: " + calculatePerimeter();
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle{width=" + width + ", length=" + length + ", id=" + id + ", units=" + units + "}";
     }
 }
